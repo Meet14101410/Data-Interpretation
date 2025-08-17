@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <numeric>
+#include <algorithm>
+#include <map>
+
+double calculate_mean(const std::vector<double>& data) {
+    if (data.empty()) return 0.0;
+    double sum = std::accumulate(data.begin(), data.end(), 0.0);
+    return sum / data.size();
+}
+
+double calculate_median(std::vector<double>& data) {
+    if (data.empty()) return 0.0;
+    std::sort(data.begin(), data.end());
+    size_t size = data.size();
+    if (size % 2 == 1) {
+        return data[size / 2];
+    } else {
+        return (data[size / 2 - 1] + data[size / 2]) / 2.0;
+    }
+}
+
+double calculate_mode(const std::vector<double>& data) {
+    if (data.empty()) return 0.0;
+    std::map<double, int> counts;
+    for (double value : data) {
+        counts[value]++;
+    }
+    double mode = data[0];
+    int max_count = 0;
+    for (const auto& pair : counts) {
+        if (pair.second > max_count) {
+            max_count = pair.second;
+            mode = pair.first;
+        }
+    }
+    return mode;
+}
+
+int main() {
+    std::vector<double> dataset = {2.5, 4.1, 3.2, 5.5, 2.5, 6.0, 4.1, 4.1};
+    std::vector<double> sorted_dataset = dataset; // Create a copy for the median calculation
+
+    std::cout << "Original Dataset: ";
+    for (double val : dataset) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+
+    double mean = calculate_mean(dataset);
+    std::cout << "Mean: " << mean << std::endl;
+
+    double median = calculate_median(sorted_dataset);
+    std::cout << "Median: " << median << std::endl;
+
+    double mode = calculate_mode(dataset);
+    std::cout << "Mode: " << mode << std::endl;
+
+    return 0;
+}
